@@ -1,14 +1,34 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios"
 import styled from "styled-components"
 import Logo from "../Logo"
 
-export default function Login(){
+export default function Login({salvarToken}){
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+
+    function logar(){
+        axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", {
+            email,
+            password
+        })
+        .then(response => {
+            console.log(response.data)
+            salvarToken(response.data.token)
+            navigate("/habitos")
+
+        })
+        .catch(error => { console.log(error) })
+    }
+
     return(
         <Container>
             <Logo />
-            <input placeholder="email"></input>
-            <input placeholder="senha"></input>
-            <button>Entrar</button>
+            <input placeholder="email" onChange={e => setEmail(e.target.value)}></input>
+            <input placeholder="senha" onChange={e => setPassword(e.target.value)}></input>
+            <button onClick={()=> logar()}>Entrar</button>
             <Link to="/cadastro">
                 <p>Não tem uma conta? Cadastre-se!</p>
             </Link>
@@ -31,6 +51,13 @@ const Container = styled.div`
         border: 1px solid #D5D5D5;
         box-sizing: border-box;
         border-radius: 5px;
+
+        font-family: 'Lexend Deca';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 19.976px;
+        line-height: 25px;
+        color: #DBDBDB;
     }
 
     button{
