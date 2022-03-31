@@ -27,14 +27,11 @@ export default function Habitos({token}){
         return(
             <Container>
                 <Header />
-                <Menu />
+                <Menu token={token} />
                 <Mensagem>
                     <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
                 </Mensagem>
                 
-                {/* <Link to="/cadastro">
-                    <button>Cadastrar um hábito</button>
-                </Link> */}
             </Container>
         )
     }
@@ -42,7 +39,8 @@ export default function Habitos({token}){
     return(
         <>  
             <Header />
-            <h1>Habitos</h1>
+            <Menu token={token} />
+    
         </>
     )
 }

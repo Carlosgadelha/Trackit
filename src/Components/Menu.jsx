@@ -1,10 +1,41 @@
 import styled from "styled-components"
+import axios from "axios"
 import { useState } from "react"
 
-export default function Menu(){
+export default function Menu({token}){
 
     const [ativar, setAtivar] = useState(false)
+    const [dias, setDias] = useState(new Map())
+    const [habito, setHabito] = useState("")
 
+    function toggle(id,dia){
+       const selecionado = dias.has(id);
+       if(selecionado){
+           dias.delete(id);
+           setDias( new Map(dias));
+       }else{
+            setDias( new Map(dias.set(id, dia)));
+       }
+    }
+
+    function criarHabito(){
+        axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", {
+            
+            name: habito,
+            days: [ ...dias.keys()] 
+        },{
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        }).then(response => {
+            console.log(response.data)
+        })
+        console.log(habito)
+        console.log([...dias.keys()]);
+    }
+
+    
+    
     if(ativar){
 
         return(
@@ -14,19 +45,33 @@ export default function Menu(){
                     <button onClick={()=> setAtivar(!ativar)}>+</button>
                 </Titulo>
                 <CriarHabitos>
-                    <input placeholder="nome do hábito"></input>
+                    <input placeholder="nome do hábito" onChange={e => setHabito(e.target.value)}></input>
                     <Dias>
-                        <button>D</button>
-                        <button>S</button>
-                        <button>T</button>
-                        <button>Q</button>
-                        <button>Q</button>
-                        <button>S</button>
-                        <button>S</button>
+                        <Button 
+                            selecionado = {dias.has(0)}
+                            onClick={()=> toggle(0, 'D')}> D </Button>
+                        <Button 
+                            selecionado = {dias.has(1)}
+                            onClick={()=> toggle(1, 'S')}> S </Button>
+                        <Button 
+                            selecionado = {dias.has(2)}
+                            onClick={()=> toggle(2, 'T')}> T </Button>
+                        <Button
+                            selecionado = {dias.has(3)} 
+                            onClick={()=> toggle(3, 'Q')}> Q </Button>
+                        <Button 
+                            selecionado = {dias.has(4)} 
+                            onClick={()=> toggle(4, 'Q')}> Q </Button>
+                        <Button
+                            selecionado = {dias.has(5)}  
+                            onClick={()=> toggle(5, 'S')}> S </Button>
+                        <Button 
+                            selecionado = {dias.has(6)} 
+                            onClick={()=> toggle(6, 'S')}> S </Button>
                     </Dias>
                     <Opcoes>
-                        <div className="cancelar">Cancelar</div>
-                        <button>Salvar</button>
+                        <div className="cancelar" onClick={()=> setAtivar(!ativar)}>Cancelar</div>
+                        <button onClick={()=> criarHabito()}>Salvar</button>
                     </Opcoes>
                     
                 </CriarHabitos>
@@ -34,6 +79,7 @@ export default function Menu(){
         )
 
     }
+
     return(
         <Container>
             <Titulo>
@@ -93,7 +139,6 @@ const Titulo = styled.div`
     }
 
 `  
-
 const CriarHabitos = styled.div`
     
     width: 340px;
@@ -114,6 +159,16 @@ const CriarHabitos = styled.div`
         margin-left: 19px;
         margin-top: 18px;
 
+        font-family: 'Lexend Deca';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 19.976px;
+        line-height: 25px;
+        /* identical to box height */
+
+
+        color: #666666;
+
     }
 
     input::placeholder{
@@ -127,31 +182,32 @@ const CriarHabitos = styled.div`
     }
 
 `
-
 const Dias = styled.div`
     margin-left: 19px;
-
-    button{
-        width: 30px;
-        height: 30px;
-        margin-right: 4px;
-        margin-top: 8px;
-        background: #FFFFFF;
-        border: 1px solid #D5D5D5;
-        box-sizing: border-box;
-        border-radius: 5px;
-
-        font-family: 'Lexend Deca';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 19.976px;
-        line-height: 25px;
-
-        color: #DBDBDB;
-    }
-
+    display: flex;
 `
 
+const Button = styled.div`
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    margin-right: 4px;
+    margin-top: 8px;
+    background: ${props => props.selecionado ?'#CFCFCF':'#FFFFFF'};
+    border: ${props => props.selecionado ?'1px solid #CFCFCF':'1px solid #D5D5D5'} ; 
+    box-sizing: border-box;
+    border-radius: 5px;
+
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19.976px;
+    line-height: 25px;
+
+    color: ${props => props.selecionado ?'#FFFFFF':'#DBDBDB'}; ;  ;
+
+`
 const Opcoes = styled.div`
 
        
