@@ -8,14 +8,12 @@ import Habitos from '../Habitos';
 
 export default function App(){
 
-    const [token, setToken] = useState(null);
-    console.log(token)
     return(
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<Login salvarToken={(token) => setToken(token)}/>}/>
+                <Route path='/' element={<Login />}/>
                 <Route path='/cadastro' element={<Cadastro />}/>
-                <Route path='/habitos' element={<Habitos token={token} />}/>
+                <Route path='/habitos' element={<Habitos />}/>
             </Routes>
         </BrowserRouter>  
     )

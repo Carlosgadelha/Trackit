@@ -1,12 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios"
 import styled from "styled-components"
-import Logo from "../Logo"
+import Logo from "./Logo"
+import { useAuth } from "../providers/auth";
 
-export default function Login({salvarToken}){
+export default function Login(){
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const {setToken} = useAuth();
     const navigate = useNavigate();
 
     function logar(){
@@ -16,7 +19,8 @@ export default function Login({salvarToken}){
         })
         .then(response => {
             console.log(response.data)
-            salvarToken(response.data.token)
+            localStorage.setItem("token", response.data.token)
+            setToken(response.data.token)
             navigate("/habitos")
 
         })

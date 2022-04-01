@@ -1,12 +1,16 @@
 import styled from "styled-components"
 import axios from "axios"
-import { useState } from "react"
+import { useState, useContext } from "react"
+import { useNavigate } from "react-router-dom"
+import { useAuth } from "../providers/auth";
 
-export default function Menu({token}){
+export default function Menu(){
 
     const [ativar, setAtivar] = useState(false)
     const [dias, setDias] = useState(new Map())
     const [habito, setHabito] = useState("")
+    const navigate = useNavigate();
+    const {token} = useAuth();
 
     function toggle(id,dia){
        const selecionado = dias.has(id);
@@ -28,10 +32,11 @@ export default function Menu({token}){
                 "Authorization": `Bearer ${token}`
             }
         }).then(response => {
-            console.log(response.data)
+            setAtivar(!ativar);
+            navigate("/habitos")
+        
         })
-        console.log(habito)
-        console.log([...dias.keys()]);
+
     }
 
     
@@ -94,10 +99,8 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    
+    margin-bottom: 20px;
     margin-top: 98px;
-
-    /* margin-top: 28px; */
 `
 const Titulo = styled.div`
     display: flex;

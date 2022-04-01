@@ -1,14 +1,16 @@
 import axios from "axios";
 import {useState, useEffect} from 'react';
 import styled from "styled-components"
+import Habito from "./Habito";
+import { useAuth } from "../providers/auth";
+import Header from "./Header";
+import Menu from "./Menu";
 
-import Header from "../Header";
-import Menu from "../Menu";
 
-
-export default function Habitos({token}){
+export default function Habitos(){
+    const {token} = useAuth();
     const [habitos, setHabitos] = useState([]);
-
+    console.log(token);
     useEffect(() => {
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", {
             headers: {
@@ -16,11 +18,13 @@ export default function Habitos({token}){
             }
         })
         .then(response => {
-            setHabitos(response.data)
-            console.log(response.data)
+            setHabitos([...response.data])
+            
         })
         .catch(error => { console.log(error) })
     },[]) 
+    
+    console.log(habitos)
 
     if(habitos.length === 0){
         
@@ -34,16 +38,21 @@ export default function Habitos({token}){
                 
             </Container>
         )
-    }
+    }else{
 
-    return(
-        <>  
-            <Header />
-            <Menu token={token} />
     
-        </>
-    )
+        return(
+            <Container>  
+                <Header />
+                <Menu token={token} />
+
+                {habitos.map(habito => <Habito  nome ={habito.name} dias ={habito.days} key={habito.id}/>)}
+            </Container>
+        )
+   }
 }
+
+
 
 
 
@@ -68,7 +77,7 @@ const Mensagem = styled.div`
         font-family: 'Lexend Deca';
         width: 340px;
         font-style: normal;
-        margin-top: 28px;
+        margin-top: 8px;
         font-weight: 400;
         font-size: 17.976px;
         line-height: 22px;
