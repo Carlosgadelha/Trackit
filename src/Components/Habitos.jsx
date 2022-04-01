@@ -5,12 +5,15 @@ import Habito from "./Habito";
 import { useAuth } from "../providers/auth";
 import Header from "./Header";
 import Menu from "./Menu";
+import Footer from "./Footer";
 
 
 export default function Habitos(){
+    
     const {token} = useAuth();
     const [habitos, setHabitos] = useState([]);
-    console.log(token);
+    console.log( typeof token);
+
     useEffect(() => {
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", {
             headers: {
@@ -21,7 +24,7 @@ export default function Habitos(){
             setHabitos([...response.data])
             
         })
-        .catch(error => { console.log(error) })
+        .catch(error => { console.log(error.response.data) })
     },[]) 
     
     console.log(habitos)
@@ -44,9 +47,9 @@ export default function Habitos(){
         return(
             <Container>  
                 <Header />
-                <Menu token={token} />
-
+                <Menu />
                 {habitos.map(habito => <Habito  nome ={habito.name} dias ={habito.days} key={habito.id}/>)}
+                <Footer />
             </Container>
         )
    }
@@ -61,8 +64,8 @@ const Container = styled.div`
     flex-direction: column;
     background: #E5E5E5;
     width: 100%;
-    height: 100vh;
-    /* align-items: center; */
+    height: 100%;
+    /* align-items: enter; */
     /* justify-content: center; */
     /* margin-top: 70px; */
 

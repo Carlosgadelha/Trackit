@@ -18,8 +18,8 @@ export default function Login(){
             password
         })
         .then(response => {
-            console.log(response.data)
-            localStorage.setItem("token", response.data.token)
+            console.log( typeof response.data.token)
+            localStorage.setItem('token', response.data.token)
             setToken(response.data.token)
             navigate("/habitos")
 

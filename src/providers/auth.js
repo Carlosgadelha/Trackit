@@ -7,7 +7,9 @@ export const AuthProvider  = (props) => {
     const [token, setToken] = react.useState("")
 
     react.useEffect(() => {
+
         const useStorage = localStorage.getItem("token")
+    
         if (useStorage) {
             setToken(useStorage)
         }else{

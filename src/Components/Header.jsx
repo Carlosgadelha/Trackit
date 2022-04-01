@@ -4,7 +4,7 @@ import styled from "styled-components"
 export default function Header(props){
 
     const {imagem} = props;
-    console.log(imagem)
+    
     return(
         <Container>
             <h1>TrackIt</h1>
