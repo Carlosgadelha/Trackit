@@ -4,8 +4,8 @@ import { useState} from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../providers/auth";
 
-export default function Menu(){
-
+export default function Menu(props){
+    const {atualizar}  = props ;
     const [ativar, setAtivar] = useState(false)
     const [dias, setDias] = useState(new Map())
     const [habito, setHabito] = useState("")
@@ -33,7 +33,7 @@ export default function Menu(){
             }
         }).then(response => {
             setAtivar(!ativar);
-            navigate("/habitos")
+            atualizar();
         
         })
 

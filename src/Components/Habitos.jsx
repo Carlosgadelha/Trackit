@@ -12,9 +12,10 @@ export default function Habitos(){
     
     const {token} = useAuth();
     const [habitos, setHabitos] = useState([]);
-    console.log( typeof token);
 
-    useEffect(() => {
+
+    const handleHabbits = () => {
+
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", {
             headers: {
                 "Authorization": `Bearer ${token}`
@@ -25,16 +26,20 @@ export default function Habitos(){
             
         })
         .catch(error => { console.log(error.response.data) })
+
+    }
+
+    useEffect(() => {
+        handleHabbits()
     },[]) 
-    
-    console.log(habitos)
+
 
     if(habitos.length === 0){
         
         return(
             <Container>
                 <Header />
-                <Menu token={token} />
+                <Menu />
                 <Mensagem>
                     <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
                 </Mensagem>
@@ -47,8 +52,10 @@ export default function Habitos(){
         return(
             <Container>  
                 <Header />
-                <Menu />
-                {habitos.map(habito => <Habito  nome ={habito.name} dias ={habito.days} key={habito.id}/>)}
+                <Menu atualizar = {handleHabbits}/>
+                <div className="habitos">
+                    {habitos.map(habito => <Habito  nome ={habito.name} dias ={habito.days} key={habito.id} id={habito.id} atualizar = {handleHabbits}/>)}
+                </div>
                 <Footer />
             </Container>
         )
@@ -64,10 +71,18 @@ const Container = styled.div`
     flex-direction: column;
     background: #E5E5E5;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     /* align-items: enter; */
     /* justify-content: center; */
     /* margin-top: 70px; */
+
+    .habitos{
+        display: flex;
+        background: #E5E5E5;;
+        flex-direction: column;
+        padding-bottom: 70px;
+    
+    }
 
 
 `

@@ -1,11 +1,35 @@
 import styled from "styled-components"
+import axios from "axios";
+import { useAuth } from "../providers/auth";
+import { IoTrashOutline } from "react-icons/io5";
 
-export default function Habito({nome,dias}){
+
+export default function Habito({nome,dias,id, atualizar}){
+
+    const {token} = useAuth();
+
+    function Delete(){
+
+        
+        if(window.confirm('Deseja Deletar esse Hábito?') ){
+            axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                atualizar();  
+            })
+            .catch(error => { console.log(error.response.data) })
+        }
+        
+    }
 
     return(
         <Container>
             <Card>
                 <h1>{nome}</h1>
+                <IoTrashOutline  className="icon" onClick ={() => Delete()}/>
                 <Dias>
                     <Button selecionado = {dias.includes(0)}>D</Button>
                     <Button selecionado = {dias.includes(1)}>S</Button>
@@ -36,6 +60,7 @@ const Card = styled.div`
     width: 340px;
     height: 91px;
     margin-left: 0px;
+    position: relative;
     background: #FFFFFF;
     border-radius: 5px;
 
@@ -48,6 +73,13 @@ const Card = styled.div`
         font-size: 19.976px;
         line-height: 25px;
         color: #666666;
+    }
+
+    .icon{
+        font-size: 17px;
+        position: absolute;
+        top: 11px;
+        right: 10px;
     }
 
 `
