@@ -21,7 +21,7 @@ export default function Login(){
 
             localStorage.setItem('token', response.data.token);
             setToken(response.data.token)
-            navigate("/habitos")
+            navigate("/hoje")
 
         })
         .catch(error => { console.log(error) })

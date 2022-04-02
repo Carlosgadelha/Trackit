@@ -10,9 +10,24 @@ import Footer from "./Footer";
 
 export default function Habitos(){
     
-    const {token} = useAuth();
+    const {token, setConcluidos} = useAuth();
     const [habitos, setHabitos] = useState([]);
 
+    function getConcluidos(){
+            
+        axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+        .then(response => {
+
+            setConcluidos((response.data.filter(habito => habito.done).length/response.data.length * 100).toFixed(0))
+
+        })
+        .catch(error => { console.log(error.response) })
+
+}
     
     const handleHabbits = () => {
 
@@ -23,7 +38,7 @@ export default function Habitos(){
         })
         .then(response => {
             setHabitos([...response.data])
-            
+            getConcluidos()
         })
         .catch(error => { console.log(error.response.data) })
 

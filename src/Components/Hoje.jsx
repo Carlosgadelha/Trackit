@@ -35,7 +35,6 @@ export default function Hoje(){
             setHabitos([...response.data])
             setConcluidos((response.data.filter(habito => habito.done).length/response.data.length * 100).toFixed(0))
 
-            
 
         })
         .catch(error => { console.log(error.response) })
@@ -87,31 +86,52 @@ export default function Hoje(){
         getHabitos()
     },[]) 
 
-    console.log(habitos)
 
     return(
         <Container>
             <Header />
-            <Titulo>
-                <div className="infos">
-                    <h2>{dataAtual()}</h2>
-                    <p>Nenhum hábito concluído ainda</p>
-                </div>
-            </Titulo>
-            { habitos.map( habito => 
-
-                <Habito concluida = {habito.done} onClick={()=> toggle(habito.id, habito.done)}> 
-                    <h2>{habito.name}</h2>
-                    <p>Sequência atual: {habito.currentSequence} dias</p>
-                    <p>Seu recorde: {habito.highestSequence} dias</p>
-                    <IoCheckbox  className="icon" />
-                </Habito>
+            <Titulo concluidos = {concluidos}>
+                <Infos data ={dataAtual()} concluidos = {concluidos}>
+                    
+                </Infos>
                 
-            )}
-            
+            </Titulo>
+            <div className="habitos">
+                { habitos.map( habito => 
+
+                    <Habito concluida = {habito.done} onClick={()=> toggle(habito.id, habito.done)} key={habito.id} iguais={habito.currentSequence === habito.highestSequence}> 
+                        <h2>{habito.name}</h2>
+                        <p>Sequência atual:{habito.currentSequence} dias</p>
+                        <p>Seu recorde: {habito.highestSequence} dias</p>
+                        <IoCheckbox  className="icon" />
+                    </Habito>
+                    
+                )}
+            </div>
             <Footer />
         </Container>
     )
+}
+
+
+function Infos(props) {
+
+    if(props.concluidos === '0'){
+        return(
+            <div className="infos">
+                <h2>{props.data}</h2>
+                <p>Nenhum hábito concluído ainda</p>
+            </div>
+        )
+    }
+
+    return(
+        <div className="infos">
+            <h2>{props.data}</h2>
+            <p>{props.concluidos}% dos hábitos concluídos</p>
+        </div>
+    )
+
 }
 
 const Container = styled.div`
@@ -121,6 +141,14 @@ const Container = styled.div`
     align-items: center;
     width: 100%;
     height: 100vh;
+
+    .habitos{
+        display: flex;
+        background: #E5E5E5;;
+        flex-direction: column;
+        padding-bottom: 70px;
+    
+    }
 
 `
 
@@ -150,7 +178,7 @@ const Titulo = styled.div`
             font-size: 17.976px;
             line-height: 22px;
 
-            color: #BABABA;
+            color: ${props => props.concluidos !== '0'?'#8FC549':'#BABABA'};
         }
     }
 `
