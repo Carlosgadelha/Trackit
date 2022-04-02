@@ -5,14 +5,19 @@ import styled from "styled-components"
 import Logo from "./Logo"
 import { useAuth } from "../providers/auth";
 
+
+import { ThreeDots } from  'react-loader-spinner'
+
 export default function Login(){
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
     const {setToken} = useAuth();
     const navigate = useNavigate();
 
     function logar(){
+        setLoading(true);
         axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", {
             email,
             password
@@ -24,18 +29,30 @@ export default function Login(){
             navigate("/hoje")
 
         })
-        .catch(error => { console.log(error) })
-    }
+        .catch(() => {
+            alert("Usuário ou senha inválidos" ) 
+            setLoading(false)
+            setEmail("")
+            setPassword("")
+        })
+        }
 
     return(
-        <Container>
+        <Container status = {loading}>
             <Logo />
-            <input placeholder="email" onChange={e => setEmail(e.target.value)}></input>
-            <input placeholder="senha" onChange={e => setPassword(e.target.value)}></input>
-            <button onClick={()=> logar()}>Entrar</button>
+            <input placeholder="email" onChange={e => setEmail(e.target.value)} disabled ={loading} value={email}></input>
+            <input placeholder="senha" onChange={e => setPassword(e.target.value)} disabled ={loading} value={password}></input>
+            <button onClick={()=> logar()} disabled ={loading} >{loading?<ThreeDots
+                height="100"
+                width="100"
+                color='white'
+                text= 'center'
+                ariaLabel='loading'
+            />:'Entrar'} </button>
             <Link to="/cadastro">
                 <p>Não tem uma conta? Cadastre-se!</p>
             </Link>
+            
         </Container>
     )
 }
@@ -51,7 +68,7 @@ const Container = styled.div`
         height: 45px;
         margin-bottom: 6px;
 
-        background: #FFFFFF;
+        background: ${props => props.status? '#F2F2F2;':'#FFFFFF'};
         border: 1px solid #D5D5D5;
         box-sizing: border-box;
         border-radius: 5px;
@@ -60,14 +77,29 @@ const Container = styled.div`
         font-style: normal;
         font-weight: 400;
         font-size: 19.976px;
+        text-indent: 11px;
         line-height: 25px;
         color: #DBDBDB;
+
+        &::placeholder{
+            font-family: 'Lexend Deca';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 19.976px;
+            text-indent: 11px;
+            line-height: 25px;
+            color: #DBDBDB;
+            
+        }
+
     }
 
     button{
         width: 303px;
         height: 45px;
-
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background: #52B6FF;
         border: none;
         border-radius: 4.63636px;

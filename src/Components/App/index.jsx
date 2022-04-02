@@ -13,24 +13,6 @@ export default function App(){
 
     const {token, setConcluidos} = useAuth();
 
-    function getConcluidos(){
-            
-            axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            })
-            .then(response => {
-
-                setConcluidos((response.data.filter(habito => habito.done).length/response.data.length * 100).toFixed(0))
-
-            })
-            .catch(error => { console.log(error.response) })
-
-    }
-   
-    getConcluidos();
-
     return(
         <BrowserRouter>
             <Routes>

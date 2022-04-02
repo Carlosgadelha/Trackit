@@ -10,7 +10,7 @@ import Footer from "./Footer";
 
 export default function Historico(){
     
-    const {token, } = useAuth();
+    const {token } = useAuth();
     const [habitos, setHabitos] = useState([]);
 
     useEffect(() => {
@@ -26,6 +26,7 @@ export default function Historico(){
         .catch(error => { console.log(error.response.data) })
     },[]) 
         
+    console.log(habitos)
         return(
             <Container>
                 <Header />

@@ -61,6 +61,7 @@ const Container = styled.div`
         font-family: 'Lexend Deca';
         font-style: normal;
         font-weight: 400;
+        text-indent: 11px;
         font-size: 19.976px;
         line-height: 25px;
         color: #DBDBDB;
@@ -70,6 +71,7 @@ const Container = styled.div`
         font-family: 'Lexend Deca';
         font-style: normal;
         font-weight: 400;
+        text-indent: 11px;
         font-size: 19.976px;
         line-height: 25px;
         color: #DBDBDB;

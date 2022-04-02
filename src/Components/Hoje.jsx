@@ -43,14 +43,6 @@ export default function Hoje(){
 
     console.log(concluidos)
 
-    // function habitosConcluidos(){
-    //     let concluidos = 0;
-    //     let porcentagem = 0;
-    //     habitos.forEach(habito => {if(habito.done === true) concluidos++})
-    //     porcentagem = (concluidos / habitos.length) * 100;
-    //     console.log(porcentagem)
-    // }
-
 
     function toggle(id, status){
         if(status){
