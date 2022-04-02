@@ -19,7 +19,7 @@ export default function Login(){
         })
         .then(response => {
 
-            localStorage.setItem('token', response.data.token)
+            localStorage.setItem('token', response.data.token);
             setToken(response.data.token)
             navigate("/habitos")
 

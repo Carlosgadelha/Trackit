@@ -13,7 +13,7 @@ export default function Habitos(){
     const {token} = useAuth();
     const [habitos, setHabitos] = useState([]);
 
-
+    
     const handleHabbits = () => {
 
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", {

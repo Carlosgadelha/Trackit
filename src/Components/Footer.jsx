@@ -2,8 +2,11 @@ import styled from "styled-components"
 import { Link } from "react-router-dom";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { useAuth } from "../providers/auth";
 
 export default function Footer(){
+    const {concluidos} = useAuth();
+
     return(
         <Container>
             <Menus>
@@ -13,7 +16,7 @@ export default function Footer(){
                 <Link to="/hoje">
                 <div className='barraCircular'>
                 <CircularProgressbar  
-                        value={100}
+                        value={concluidos}
                         text={`Hoje`}
                         background
                         backgroundPadding={6}

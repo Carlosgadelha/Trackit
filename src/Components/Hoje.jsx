@@ -9,7 +9,7 @@ const dayjs = require('dayjs');
 
 export default function Hoje(){
 
-    const {token} = useAuth();
+    const {token, concluidos, setConcluidos} = useAuth();
     const [habitos, setHabitos] = useState([]);
     
     
@@ -24,7 +24,8 @@ export default function Hoje(){
         return `${diaSemana}, ${dia}/${mes}`
     }
 
-    useEffect(() => {
+    function getHabitos(){
+        
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", {
             headers: {
                 "Authorization": `Bearer ${token}`
@@ -32,9 +33,58 @@ export default function Hoje(){
         })
         .then(response => {
             setHabitos([...response.data])
+            setConcluidos((response.data.filter(habito => habito.done).length/response.data.length * 100).toFixed(0))
+
             
+
         })
-        .catch(error => { console.log(error.response.data) })
+        .catch(error => { console.log(error.response) })
+
+    }
+
+    console.log(concluidos)
+
+    // function habitosConcluidos(){
+    //     let concluidos = 0;
+    //     let porcentagem = 0;
+    //     habitos.forEach(habito => {if(habito.done === true) concluidos++})
+    //     porcentagem = (concluidos / habitos.length) * 100;
+    //     console.log(porcentagem)
+    // }
+
+
+    function toggle(id, status){
+        if(status){
+            axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/uncheck`,{}, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                getHabitos()
+    
+            })
+            .catch(error => { console.log(error.response.data) })
+
+        }else{
+
+            axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`,{},{
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                getHabitos()
+                
+            })
+            .catch(error => { console.log(error.response.data) })
+            
+
+        }
+    }
+
+    useEffect(() => {
+        getHabitos()
     },[]) 
 
     console.log(habitos)
@@ -48,17 +98,16 @@ export default function Hoje(){
                     <p>Nenhum hábito concluído ainda</p>
                 </div>
             </Titulo>
-            {habitos.map( habito => 
-                
-                <Habito> 
+            { habitos.map( habito => 
+
+                <Habito concluida = {habito.done} onClick={()=> toggle(habito.id, habito.done)}> 
                     <h2>{habito.name}</h2>
                     <p>Sequência atual: {habito.currentSequence} dias</p>
                     <p>Seu recorde: {habito.highestSequence} dias</p>
                     <IoCheckbox  className="icon" />
-
                 </Habito>
                 
-                )}
+            )}
             
             <Footer />
         </Container>
@@ -143,11 +192,13 @@ const Habito = styled.div`
         position: absolute;
         top: 5px;
         right: 5px;
-        color: #8FC549;
-        
-        /* border: 1px solid #E7E7E7; */
-
+        color: ${props => props.concluida?'#8FC549':'#EBEBEB'};
+        border: ${props => props.concluida?'none':'border: 1px solid #E7E7E7'};
         border-radius: 5px;
+
+        &:hover{
+            cursor: pointer;
+        }
     }
 
 
