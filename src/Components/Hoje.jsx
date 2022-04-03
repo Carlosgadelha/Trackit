@@ -5,12 +5,15 @@ import { useAuth } from "../providers/auth";
 import Header from "./Header";
 import Footer from "./Footer";
 import { IoCheckbox } from "react-icons/io5";
+import { ThreeDots } from  'react-loader-spinner'
+
 const dayjs = require('dayjs');
 
 export default function Hoje(){
 
     const {token, concluidos, setConcluidos} = useAuth();
     const [habitos, setHabitos] = useState([]);
+    const [loading, setLoading] = useState(false);
     
     
     function dataAtual(){
@@ -34,11 +37,12 @@ export default function Hoje(){
             }
         })
         .then(response => {
-            console.log(response.data)
+            
             setHabitos([...response.data])
             if(response.data.length !== 0){
                 setConcluidos((response.data.filter(habito => habito.done).length/response.data.length * 100).toFixed(0))
             }
+            setLoading(true);
 
         })
         .catch(error => { console.log(error.response) })
@@ -90,18 +94,27 @@ export default function Hoje(){
                 </Infos>
                 
             </Titulo>
-            <div className="habitos">
-                { habitos.map( habito => 
+            {(!loading) ?
+                <ThreeDots
+                    height="100"
+                    width="100"
+                    color= '#126BA5'
+                    text= 'center'
+                    ariaLabel='loading'
+                />
+            :
+                <div className="habitos">
+                    { habitos.map( habito => 
 
-                    <Habito concluida = {habito.done} onClick={()=> toggle(habito.id, habito.done)} key={habito.id} iguais={habito.currentSequence === habito.highestSequence}> 
-                        <h2>{habito.name}</h2>
-                        <p>Sequência atual: {habito.currentSequence} dias</p>
-                        <p>Seu recorde: {habito.highestSequence} dias</p>
-                        <IoCheckbox  className="icon" />
-                    </Habito>
-                    
-                )}
-            </div>
+                        <Habito concluida = {habito.done} onClick={()=> toggle(habito.id, habito.done)} key={habito.id} iguais={habito.currentSequence === habito.highestSequence}> 
+                            <h2>{habito.name}</h2>
+                            <p>Sequência atual: {habito.currentSequence} dias</p>
+                            <p>Seu recorde: {habito.highestSequence} dias</p>
+                            <IoCheckbox  className="icon" />
+                        </Habito>
+                        
+                    )}
+                </div>}
             <Footer />
         </Container>
     )

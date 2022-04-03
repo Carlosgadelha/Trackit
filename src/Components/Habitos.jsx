@@ -6,12 +6,14 @@ import { useAuth } from "../providers/auth";
 import Header from "./Header";
 import Menu from "./Menu";
 import Footer from "./Footer";
+import { ThreeDots } from  'react-loader-spinner'
 
 
 export default function Habitos(){
     
     const {token, setConcluidos} = useAuth();
     const [habitos, setHabitos] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     function getConcluidos(){
             
@@ -27,7 +29,7 @@ export default function Habitos(){
         })
         .catch(error => { console.log(error.response) })
 
-}
+    }
     
     const handleHabbits = () => {
 
@@ -39,6 +41,7 @@ export default function Habitos(){
         .then(response => {
             setHabitos([...response.data])
             getConcluidos()
+            setLoading(true);
         })
         .catch(error => { console.log(error.response.data) })
 
@@ -48,33 +51,37 @@ export default function Habitos(){
         handleHabbits()
     },[]) 
 
-
-    if(habitos.length === 0){
-        
-        return(
-            <Container>
-                <Header />
-                <Menu atualizar = {handleHabbits}/>
-                <Mensagem>
-                    <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
-                </Mensagem>
-                <Footer />
-            </Container>
-        )
-    }else{
-
     
-        return(
-            <Container>  
-                <Header />
-                <Menu atualizar = {handleHabbits}/>
-                <div className="habitos">
-                    {habitos.map(habito => <Habito  nome ={habito.name} dias ={habito.days} key={habito.id} id={habito.id} atualizar = {handleHabbits}/>)}
+    return(
+        <Container>  
+            <Header />
+            <Menu atualizar = {handleHabbits}/>
+            {(!loading) ?
+                <div className="loading">
+                    <ThreeDots
+                        height="100"
+                        width="100"
+                        color= '#126BA5'
+                        text= 'center'
+                        ariaLabel='loading'
+                    />
                 </div>
-                <Footer />
-            </Container>
-        )
-   }
+            :   (habitos.length === 0)?
+
+                    <Mensagem>
+                        <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
+                    </Mensagem>
+                :
+                    <div className="habitos">
+                        {habitos.map(habito => <Habito  nome ={habito.name} dias ={habito.days} key={habito.id} id={habito.id} atualizar = {handleHabbits}/>)}
+                    </div>
+            }
+            
+            <Footer />
+        </Container>
+    )
+
+   
 }
 
 
@@ -97,6 +104,13 @@ const Container = styled.div`
         flex-direction: column;
         padding-bottom: 70px;
     
+    }
+
+    .loading{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
     }
 
 
