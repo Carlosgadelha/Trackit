@@ -13,7 +13,7 @@ export default function Login(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const {setToken} = useAuth();
+    const {setToken, setUrlImagem} = useAuth();
     const navigate = useNavigate();
 
     function logar(){
@@ -23,9 +23,10 @@ export default function Login(){
             password
         })
         .then(response => {
-
+            console.log(response.data)
             localStorage.setItem('token', response.data.token);
             setToken(response.data.token)
+            setUrlImagem(response.data.image)
             navigate("/hoje")
 
         })
@@ -112,6 +113,10 @@ const Container = styled.div`
         text-align: center;
 
         color: #FFFFFF;
+
+        &:hover{
+            cursor: pointer;
+        }
     }
 
     p{

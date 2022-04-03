@@ -24,6 +24,8 @@ export default function Hoje(){
         return `${diaSemana}, ${dia}/${mes}`
     }
 
+
+
     function getHabitos(){
         
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", {
@@ -33,15 +35,14 @@ export default function Hoje(){
         })
         .then(response => {
             setHabitos([...response.data])
-            setConcluidos((response.data.filter(habito => habito.done).length/response.data.length * 100).toFixed(0))
-
+            if(response.data.length !== 0){
+                setConcluidos((response.data.filter(habito => habito.done).length/response.data.length * 100).toFixed(0))
+            }
 
         })
         .catch(error => { console.log(error.response) })
 
     }
-
-    console.log(concluidos)
 
 
     function toggle(id, status){
@@ -93,7 +94,7 @@ export default function Hoje(){
 
                     <Habito concluida = {habito.done} onClick={()=> toggle(habito.id, habito.done)} key={habito.id} iguais={habito.currentSequence === habito.highestSequence}> 
                         <h2>{habito.name}</h2>
-                        <p>Sequência atual:{habito.currentSequence} dias</p>
+                        <p>Sequência atual: {habito.currentSequence} dias</p>
                         <p>Seu recorde: {habito.highestSequence} dias</p>
                         <IoCheckbox  className="icon" />
                     </Habito>

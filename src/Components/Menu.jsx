@@ -33,6 +33,8 @@ export default function Menu(props){
             }
         }).then(response => {
             setAtivar(!ativar);
+            setDias( new Map());
+            setHabito("");
             atualizar();
         
         })
@@ -50,7 +52,7 @@ export default function Menu(props){
                     <button onClick={()=> setAtivar(!ativar)}>+</button>
                 </Titulo>
                 <CriarHabitos>
-                    <input placeholder="nome do hábito" onChange={e => setHabito(e.target.value)}></input>
+                    <input placeholder="nome do hábito" onChange={e => setHabito(e.target.value)} value={habito}></input>
                     <Dias>
                         <Button 
                             selecionado = {dias.has(0)}
@@ -160,6 +162,7 @@ const CriarHabitos = styled.div`
         box-sizing: border-box;
         border-radius: 5px;
         margin-left: 19px;
+        text-indent: 7px;
         margin-top: 18px;
 
         font-family: 'Lexend Deca';

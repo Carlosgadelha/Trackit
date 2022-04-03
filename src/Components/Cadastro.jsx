@@ -2,16 +2,22 @@ import {Link} from "react-router-dom"
 import {useState} from "react";
 import axios  from "axios";
 import styled from "styled-components"
-import Logo from "../Logo";
+import { useNavigate } from 'react-router-dom';
+import { ThreeDots } from  'react-loader-spinner'
+import Logo from "./Logo";
 
-export default function Cadastro({salvarToken}){
+export default function Cadastro(){
 
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [image, setImage] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
 
     function cadastrar(){
+        setLoading(true);
         axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", {
             email,
             name,
@@ -19,22 +25,32 @@ export default function Cadastro({salvarToken}){
             password
         })
         .then(response => {
-            console.log(response.data)
-            salvarToken(response.data.token)
+            navigate("/")
         })
-        .catch(error => { console.log(error) })
-    }
-
-    console.log(name, email, password)
+        .catch(() => {
+            alert("Todo mundo erra '(-_-)'")
+            setLoading(false)
+            setEmail("");
+            setName("");
+            setImage("");
+            setPassword("");
+    })}
 
     return(
-        <Container>
+        <Container status={loading}>
             <Logo />
-            <input placeholder="email" onChange={e => setEmail(e.target.value)}></input>
-            <input placeholder="senha" onChange={e => setPassword(e.target.value)}></input>
-            <input placeholder="nome" onChange={e => setName(e.target.value)}></input>
-            <input placeholder="foto" onChange={e => setImage(e.target.value)}></input>
-            <button onClick = {() => cadastrar()}>Cadastrar</button>
+            <input placeholder="email" onChange={e => setEmail(e.target.value)} disabled ={loading} value={email} ></input>
+            <input placeholder="senha" onChange={e => setPassword(e.target.value)} disabled ={loading} value={password} ></input>
+            <input placeholder="nome" onChange={e => setName(e.target.value)} disabled ={loading} value={name} ></input>
+            <input placeholder="foto" onChange={e => setImage(e.target.value)} disabled ={loading} value={image} ></input>
+            <button onClick = {() => cadastrar()} disabled ={loading}>
+                    {loading?<ThreeDots
+                        height="100"
+                        width="100"
+                        color='white'
+                        text= 'center'
+                        ariaLabel='loading'
+                    />:'Cadastrar'}</button>
             <Link to="/">
                 <p>Já tem uma conta? Faça login!</p>
             </Link>
@@ -53,7 +69,7 @@ const Container = styled.div`
         height: 45px;
         margin-bottom: 6px;
 
-        background: #FFFFFF;
+        background: ${props => props.status? '#F2F2F2;':'#FFFFFF'};
         border: 1px solid #D5D5D5;
         box-sizing: border-box;
         border-radius: 5px;
@@ -80,6 +96,9 @@ const Container = styled.div`
     button{
         width: 303px;
         height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         background: #52B6FF;
         border: none;
@@ -93,6 +112,10 @@ const Container = styled.div`
         text-align: center;
 
         color: #FFFFFF;
+
+        &:hover{
+            cursor: pointer;
+        }
     }
 
     p{

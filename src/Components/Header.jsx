@@ -1,14 +1,14 @@
-
+import { useAuth } from "../providers/auth";
 import styled from "styled-components"
 
-export default function Header(props){
+export default function Header(){
 
-    const {imagem} = props;
+    const {urlImagem} = useAuth();
     
     return(
         <Container>
             <h1>TrackIt</h1>
-            <img src="https://th.bing.com/th/id/OIP.MVQfUuotOcXdSfpyP2JWzwHaHa?pid=ImgDet&rs=1" alt="Foto Perfil"/>
+            <img src={urlImagem} alt="Foto Perfil"/>
         </Container>
     )
 }

@@ -54,7 +54,7 @@ export default function Habitos(){
         return(
             <Container>
                 <Header />
-                <Menu />
+                <Menu atualizar = {handleHabbits}/>
                 <Mensagem>
                     <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
                 </Mensagem>
