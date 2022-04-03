@@ -8,18 +8,19 @@ export default function Footer(){
     const {concluidos} = useAuth();
 
     return(
-        <Container>
+        <Container >
             <Menus>
                 <Link to="/habitos" style={{textDecoration: 'none'}}>
                     <p>Hábitos</p>
                 </Link>
                 <Link to="/hoje">
                 <div className='barraCircular'>
-                <CircularProgressbar  
+                <CircularProgressbar 
                         value={concluidos}
                         text={`Hoje`}
-                        background
+                        background 
                         backgroundPadding={6}
+                        
                         styles={buildStyles({
                         backgroundColor: "#3e98c7",
                         textColor: "#fff",
@@ -74,6 +75,7 @@ const Menus = styled.div`
         position: absolute;
         left:106px;
         bottom: 10px;
+        
         /* justify-content: center;
         align-items: center; */
         width: 91px;

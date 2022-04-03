@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { ThreeDots } from  'react-loader-spinner'
 import axios from "axios"
 import { useState} from "react"
 import { useNavigate } from "react-router-dom"
@@ -9,6 +10,8 @@ export default function Menu(props){
     const [ativar, setAtivar] = useState(false)
     const [dias, setDias] = useState(new Map())
     const [habito, setHabito] = useState("")
+    const [loading, setLoading] = useState(false)
+
     const navigate = useNavigate();
     const {token} = useAuth();
 
@@ -23,6 +26,7 @@ export default function Menu(props){
     }
 
     function criarHabito(){
+        setLoading(true);
         axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", {
             
             name: habito,
@@ -37,6 +41,11 @@ export default function Menu(props){
             setHabito("");
             atualizar();
         
+        }).catch(error => { 
+            alert("Todo mundo erra '(-_-)'")
+            setLoading(false);
+            setDias( new Map());
+            setHabito("");
         })
 
     }
@@ -51,34 +60,48 @@ export default function Menu(props){
                     <h1>Meus hábitos</h1>
                     <button onClick={()=> setAtivar(!ativar)}>+</button>
                 </Titulo>
-                <CriarHabitos>
+                <CriarHabitos status={loading}>
                     <input placeholder="nome do hábito" onChange={e => setHabito(e.target.value)} value={habito}></input>
                     <Dias>
                         <Button 
+                            disabled ={loading}
                             selecionado = {dias.has(0)}
                             onClick={()=> toggle(0, 'D')}> D </Button>
                         <Button 
+                            disabled ={loading}
                             selecionado = {dias.has(1)}
                             onClick={()=> toggle(1, 'S')}> S </Button>
                         <Button 
+                            disabled ={loading}
                             selecionado = {dias.has(2)}
                             onClick={()=> toggle(2, 'T')}> T </Button>
                         <Button
+                            disabled ={loading}
                             selecionado = {dias.has(3)} 
                             onClick={()=> toggle(3, 'Q')}> Q </Button>
-                        <Button 
+                        <Button
+                            disabled ={loading} 
                             selecionado = {dias.has(4)} 
                             onClick={()=> toggle(4, 'Q')}> Q </Button>
                         <Button
+                            disabled ={loading}
                             selecionado = {dias.has(5)}  
                             onClick={()=> toggle(5, 'S')}> S </Button>
-                        <Button 
+                        <Button
+                            disabled ={loading} 
                             selecionado = {dias.has(6)} 
                             onClick={()=> toggle(6, 'S')}> S </Button>
                     </Dias>
                     <Opcoes>
                         <div className="cancelar" onClick={()=> setAtivar(!ativar)}>Cancelar</div>
-                        <button onClick={()=> criarHabito()}>Salvar</button>
+                        <button onClick={()=> criarHabito() } disabled ={loading}>
+                            {loading?<ThreeDots
+                                        height="100"
+                                        width="100"
+                                        color='white'
+                                        text= 'center'
+                                        ariaLabel='loading'
+                                     />:'Salvar'}</button>
                     </Opcoes>
                     
                 </CriarHabitos>
@@ -141,6 +164,10 @@ const Titulo = styled.div`
         line-height: 34px;
         
         color: #FFFFFF;
+
+        &:hover{
+            cursor: pointer;
+       }
     }
 
 `  
@@ -157,7 +184,7 @@ const CriarHabitos = styled.div`
     input{
         width: 303px;
         height: 45px;
-        background: #FFFFFF;
+        background: ${props => props.status? '#F2F2F2;':'#FFFFFF'};
         border: 1px solid #D5D5D5;
         box-sizing: border-box;
         border-radius: 5px;
@@ -211,7 +238,11 @@ const Button = styled.div`
     font-size: 19.976px;
     line-height: 25px;
 
-    color: ${props => props.selecionado ?'#FFFFFF':'#DBDBDB'}; ;  ;
+    color: ${props => props.selecionado ?'#FFFFFF':'#DBDBDB'};
+    
+    &:hover{
+            cursor: pointer;
+    }
 
 `
 const Opcoes = styled.div`
@@ -236,18 +267,25 @@ const Opcoes = styled.div`
        line-height: 20px;
        color: #52B6FF;
 
+       &:hover{
+            cursor: pointer;
+       }
+
    }
 
    button{
        
        width: 84px;
        height: 35px;
+       display: flex;
+       align-items: center;
+       justify-content: center;
        margin-right: 16px;
        background: #52B6FF;
        border: none;
        border-radius: 4.63636px;
 
-       font-family: 'Lexend Deca';
+        font-family: 'Lexend Deca';
         font-style: normal;
         font-weight: 400;
         font-size: 15.976px;
@@ -256,6 +294,10 @@ const Opcoes = styled.div`
         text-align: center;
 
         color: #FFFFFF;
+
+        &:hover{
+            cursor: pointer;
+       }
 
    }
 

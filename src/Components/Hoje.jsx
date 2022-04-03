@@ -34,6 +34,7 @@ export default function Hoje(){
             }
         })
         .then(response => {
+            console.log(response.data)
             setHabitos([...response.data])
             if(response.data.length !== 0){
                 setConcluidos((response.data.filter(habito => habito.done).length/response.data.length * 100).toFixed(0))

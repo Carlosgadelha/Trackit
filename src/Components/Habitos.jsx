@@ -58,7 +58,7 @@ export default function Habitos(){
                 <Mensagem>
                     <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
                 </Mensagem>
-                
+                <Footer />
             </Container>
         )
     }else{

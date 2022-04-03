@@ -23,8 +23,9 @@ export default function Login(){
             password
         })
         .then(response => {
-            console.log(response.data)
+            
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('imagem', response.data.image);
             setToken(response.data.token)
             setUrlImagem(response.data.image)
             navigate("/hoje")
